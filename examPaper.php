@@ -1,6 +1,25 @@
 <?php
 require 'connectiondb.php';
 session_start();
+// include 'index.php';
+
+// if(isset($_GET['btnfaceExam']))
+// {
+//   date_default_timezone_set('Asia/Colombo');
+
+// $dateNow = date("Y-m-d H:i:s");;
+
+// echo "Time the button was clicked : ". $dateNow."<br>";
+
+// $date = date("Y-m-d");
+// $hour =  date('G');
+// echo $hour;
+// echo '<br>';
+// // CURDATE();
+
+// $today= date('Y-m-d');
+
+// }
 
 
 ?>
@@ -73,17 +92,19 @@ session_start();
 
  date_default_timezone_set('Asia/Colombo');
  
- $dateNow = date("Y-m-d H:00:00");
+ $dateNow = date("Y-m-d H:i:s");;
+ //echo "Time is now :" . $dateNow."<br>";
+
  $date = date("Y-m-d");
  $hour =  date('G');
- echo $hour;
- echo '<br>';
+//  echo $hour;
+//  echo '<br>';
  // CURDATE();
  
  $today= date('Y-m-d');
  
  
- $query="SELECT * FROM `exam` WHERE `SDate`='$dateNow' ORDER BY Eid DESC";
+ $query="SELECT * FROM `exam` WHERE `Examcol`='Active'";
  $connect =mysqli_query($conn,$query);
  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
  // $stmt=$conn->prepare($query);
@@ -91,141 +112,57 @@ session_start();
  // $result = $stmt-> fetchAll();
  foreach($data as $value)
  {
-   echo "<tr>";
-       echo"	<td>".$value['Eid']."</td>";	
-       echo"	<td>".$value['ExamName']."</td>";
-       echo"	<td>".$value['SDate']."</td>";
-      echo"	<td>".$value['Duration']."</td>";
-       echo"	<td>".$value['Examcol']."</td>";
-        echo"</tr>";
+   $Examid = $value['Eid'];
+  
+  //  echo "<div class='container' >";
+  //      echo "<h1>".$value['ExamName']."</h1>";	
+      //  echo ".$value['ExamName']."";
+      //  echo ".$value['SDate']."";
+      // echo ".$value['Duration']."";
+      //  echo ".$value['Examcol']."";
+      //   echo"</tr>";
+     echo " <br>";
+     echo " <div class='container' >";
+    //  echo "    <var><h4> Time :" . $dateNow." </h4>";
+     echo "    <var><h1> <a href='index.php'> < </a>";
+          
+     echo "   ".$value['ExamName']."</h1></var>";
+     echo "    <var><h4> Time :" . $dateNow." &nbsp&nbsp&nbsp&nbsp&nbsp Exam Time : ".$value['Duration']."mins </h4>";
+    //  echo "    <h2>Exam Time : ".$value['Duration']."</h2>";
+     echo "    <h2>Time Left : --/--</h2>";
  
  }
 
+echo $Examid;
 
 
 
 
 ?>
 
-  <?php
 
-// date_default_timezone_set('Asia/Colombo');
-// $dateNow = date("Y-m-d H:00:00");
+<?php
 
-// echo $dateNow;
-// echo '<br>';
-// $hour =  date('G');
-// echo '<br>';
+$query2="SELECT * FROM `user` WHERE `UserStatus`='student'";
+$connect =mysqli_query($conn,$query2);
+$data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 
-// $today= date('Y-m-d');
-
-// echo $today;
-// echo '<br>';
-//  echo $hour;
-//  echo '<br>';
-
-// // $query="SELECT * from `exam` WHERE";// `SDate` = $dateNow";
+foreach($data as $value)
+{
+  $Userid = $value['Uid'];
+  $UserNme = $value['UserName'];
+}
+echo $Userid;
+echo $UserNme;
 
 
-// $query="SELECT * FROM `exam` WHERE `SDate`=$today&$hour ORDER BY Eid DESC";
-// $connect =mysqli_query($conn,$query);
-// $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
-// // $stmt=$conn->prepare($query);
-// // $stmt->execute();
-// // $result = $stmt-> fetchAll();
-// foreach($data as $value)
-// {
-//   echo "<tr>";
-//       echo"	<td>".$value['Eid']."</td>";	
-// 			echo"	<td>".$value['ExamName']."</td>";
-// 			echo"	<td>".$value['SDate']."</td>";
-// 		 echo"	<td>".$value['Duration']."</td>";
-// 			echo"	<td>".$value['Examcol']."</td>";
-//        echo"</tr>";
 
-// }
+
 ?>
 
 
 
-<!-- // $connect =mysqli_query($conn,$query);
-// $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
-
- 
-//   foreach($data as $value)
-//   {
-//     echo "<tr>";
-//         echo"	<td>".$value['Eid']."</td>";	
-//         echo"	<td>".$value['ExamName']."</td>";
-//         echo"	<td>".$value['SDate']."</td>";
-//         // echo"	<td>".$value['Duration']."</td>";
-//         echo"	<td>".$value['Examcol']."</td>";
-//         echo"</tr>";
-
-
-//   } -->
-
-
- 
-
-<!-- 
-
-  // date_default_timezone_set('Asia/Colombo');
-  // $dateNow = date("Y-m-d H:00:00");
-  // echo $dateNow;
-
-  // $query = "SELECT * from `exam` WHERE `SDate` = $dateNow";
-  // $connect =mysqli_query($conn,$query);
-  // $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
-//   $stmt=$conn->prepare($query);
-// $stmt->execute();
-
-// $connect =mysqli_query($conn,$query);
-
-
-
-// $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
-
-// $stmt=$conn->prepare($query);
-// $stmt->execute();
-// $result = $stmt-> fetchAll();
-
-// if($query(excute()))
-// {
-//       foreach($data as $value)
-//       {
-//         echo "<tr>";
-//             echo"	<td>".$value['Eid']."</td>";	
-//             echo"	<td>".$value['ExamName']."</td>";
-//             echo"	<td>".$value['SDate']."</td>";
-//             // echo"	<td>".$value['Duration']."</td>";
-//             echo"	<td>".$value['Examcol']."</td>";
-//             echo"</tr>";
-
-
-//       }
-
-
-//     } -->
-
-
-<!-- // else
-// {
-//   echo 'Error';
-// } -->
-
-
-
-
-
-
-
-
-
-    <br>
-    <div class="container" >
-        <var><h1> <a href="index.php"> < </a> Exam Name</h1></var>
-        <h2>Time Left : --/--</h2>
+    
 
         <style>
           a:link{
@@ -235,34 +172,78 @@ session_start();
         </style>
 
 
+
+
+
     <div class="quizpaper">
         <div class="card" id="questions" style="width: 35rem;">
   <!-- <img src="./images/login.png" class="card-img-top" width="10" height="10" alt="..."> -->
   <div class="card-body">
-    <h5 class="card-title">Q.Who are you?</h5>
+
+  <?php
+
+    $query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid ORDER BY Qid ASC";
+    $connect =mysqli_query($conn,$query);
+    $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+
+    //SELECT `Qid`, `Quiz`, `Choice_i`, `Choice_ii`, `
+    // Choice_iii`, `Choice_iv`, `Answer`, `Exam_Eid` FROM 
+    // `question` WHERE 1
+
+    foreach($data as $value)
+    {
+
+    echo  '  <h5 class="card-title">Q."'.$value['Quiz'].'"</h5>
+          
+        <label class="container">
+        <input type="radio" value="one" name="fav_nub" >"'.$value['Choice_i'].'"
+
+        </label>
+
+        <label class="container">
+        <input type="radio" value="two" name="fav_nub" >"'.$value['Choice_ii'].'"
+
+        </label>
+
+        <label class="container">
+        <input type="radio" value="three" name="fav_nub" >"'.$value['Choice_iii'].'"
+
+        </label>
+
+        <label class="container">
+        <input type="radio" value="four" name="fav_nub" >"'.$value['Choice_iv'].'"
+
+        </label>';
+    }
+
+
+
+  ?>
+
+    <!-- <h5 class="card-title">Q.Who are you?</h5>
   
   <label class="container">
   <input type="radio" value="one" name="fav_nub" >One
   <!-- <span class="checkmark"></span> -->
-  </label>
+  <!-- </label>
 
   <label class="container">
   <input type="radio" value="two" name="fav_nub" >two
-  <!-- <span class="checkmark"></span> -->
+  
   </label>
 
   <label class="container">
   <input type="radio" value="three" name="fav_nub" >Three
-  <!-- <span class="checkmark"></span> -->
+  
   </label>
 
   <label class="container">
   <input type="radio" value="four" name="fav_nub" >four
-  <!-- <span class="checkmark"></span> -->
-</label>
+  
+</label> -->
 
 
-<h5 class="card-title">Q.Who are you?</h5>
+<!-- <h5 class="card-title">Q.Who are you?</h5>
   
   <label class="container">
   <input type="radio" name="fav_numb"  >One
@@ -282,10 +263,10 @@ session_start();
   <label class="container">
   <input type="radio" name="fav_numb" >four
   <span class="checkmark"></span>
-</label>
+</label> -->
 
 
-<h5 class="card-title">Q.Who are you?</h5>
+<!-- <h5 class="card-title">Q.Who are you?</h5>
   
   <label class="container">
   <input type="radio" name="fav_numb" >One
@@ -327,10 +308,10 @@ session_start();
   <label class="container">
   <input type="radio" name="fav_numb" value="Four" >four
   <span class=""></span>
-</label>
+</label> -->
 
 
-<h5 class="card-title">Q.Who are you?</h5>
+<!-- <h5 class="card-title">Q.Who are you?</h5>
   
   <label class="container">
   <input type="radio" name="fav_numb" >One
@@ -350,7 +331,7 @@ session_start();
   <label class="container">
   <input type="radio" name="fav_numb" >four
   <span class="checkmark"></span>
-</label>
+</label> --> 
 
 
 

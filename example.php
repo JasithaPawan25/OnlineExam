@@ -49,6 +49,23 @@ $_SESSION['age'] = $age;
 
 
     </form>
+<?php
+    if(isset($_POST['btnActive']))
+{
+
+  $query="UPDATE `exam` SET `Examcol`='Active' WHERE Eid =".$Activeid."";
+$connect =mysqli_query($conn,$query);
+
+
+//   try
+//   {
+  // echo '.$Activeid.';
+// } catch (Exception $th) {
+//   echo $th;
+//   }
+ // echo $r;
+}
+?>
     
 </body>
 </html>

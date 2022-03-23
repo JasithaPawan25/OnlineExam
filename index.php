@@ -81,6 +81,35 @@ if(isset($_POST['btnlogOut']))
 }
 ?>
 
+<form action="examPaper.php" method="get">
+  <div class="container">
+<button type="submit"  name="btnfaceExam" class="btn btn-primary">Face the Exam</button>
+</div>
+</form>
+
+<?php
+// if(isset($_GET['btnfaceExam']))
+// {
+//   date_default_timezone_set('Asia/Colombo');
+
+// $dateNow = date("Y-m-d H:i:s");;
+
+// echo "Time the button was clicked : ". $dateNow."<br>";
+
+// $date = date("Y-m-d");
+// $hour =  date('G');
+// echo $hour;
+// echo '<br>';
+// // CURDATE();
+
+// $today= date('Y-m-d');
+
+// }
+
+
+
+?>
+
 
 <style>
   .d-flex 
@@ -122,8 +151,8 @@ echo '<br>';
 
 $today= date('Y-m-d');
 
-
-$query="SELECT * FROM `exam` WHERE `SDate`='$dateNow' ORDER BY Eid DESC";
+$query="SELECT * FROM `exam` ORDER BY Eid DESC";
+// $query="SELECT * FROM `exam` WHERE `SDate`='$dateNow' ORDER BY Eid DESC";
 $connect =mysqli_query($conn,$query);
 $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 // $stmt=$conn->prepare($query);

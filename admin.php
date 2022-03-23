@@ -37,17 +37,7 @@ if(!isset($_SESSION['LoginUser']))
         <li class="nav-item">
           <a class="nav-link" href="makingExams.php">Make Paper</a>
         </li>
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li> -->
+        
         <li class="nav-item">
           <a class="nav-link" href="examMonitor.php">Monitor</a>
         </li>
@@ -71,38 +61,22 @@ if(!isset($_SESSION['LoginUser']))
   </div>
 </nav>
 
-<?php
+      <?php
 
 
-if(isset($_POST['btnlogOut']))
-{
- unset($_SESSION['LoginUser']);
-    header("location:login.php");
-}
-?>
+      if(isset($_POST['btnlogOut']))
+      {
+      unset($_SESSION['LoginUser']);
+          header("location:login.php");
+      }
+      ?>
 
 
-<!-- <?php
-// $query="SELECT * FROM `customer_manager` ORDER BY CID DESC";
-// $stmt=$conn->prepare($query);
-// $stmt->execute();
-// $result = $stmt-> fetchAll();
-// foreach($result as $value)
-// {
-//   echo '	<tr>
-				
-// 				<td>'.$value['ExamName'].'</td>
-// 				<td>'.$value['SDate'].'</td>
-// 				<td>'.$value['Duration'].'</td>
-// 				<td>'.$value['Examcol'].'</td>
-//         </tr>;'
-
-// }
-?> -->
 
 
 <main>
     <div class="container">
+ 
     <table class="table">
   <thead>
     <tr>
@@ -110,6 +84,8 @@ if(isset($_POST['btnlogOut']))
       <th scope="col">Exam</th>
       <th scope="col">Last Updated</th>
       <th scope="col">Status</th>
+      <th scope="col">Active Exam</th>
+      <th scope="col">Close Exam</th>
     </tr>
   </thead>
   <tbody>
@@ -121,42 +97,79 @@ $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 // $stmt=$conn->prepare($query);
 // $stmt->execute();
 // $result = $stmt-> fetchAll();
+
+
 foreach($data as $value)
-{
+{ 
+     $Activeid=$value['Eid'];
+     $DeActiveid=$value['Eid'];
+  //$value['Eid'] =$Activeid;
   echo "<tr>";
       echo"	<td>".$value['Eid']."</td>";	
 			echo"	<td>".$value['ExamName']."</td>";
 			echo"	<td>".$value['SDate']."</td>";
 			// echo"	<td>".$value['Duration']."</td>";
 			echo"	<td>".$value['Examcol']."</td>";
-       echo"</tr>";
+      // echo"	<td>".$value['Examcol']."</td>";
+      echo "<td><form method='POST'>
+      <button name='btnActive' class='btn btn-primary' value='".$Activeid."'>Open</button></td>;
+      <td><button name='btnDeActive' class='btn btn-primary' value='".$DeActiveid."'>Close</button></form></td>";
+      echo"</tr>";
+
+      //  echo $Activeid;
+     
+       
 
 }
 ?>
 
-    <!-- <tr>
-      <th scope="row">1</th>
-      <td>Exam 1</td>
-      <td>2022/3/12</td>
-      <td>Pending</td>
-    </tr> -->
-    <!-- <tr>
-      <th scope="row">2</th>
-      <td>Exam 1</td>
-      <td>2022/3/12</td>
-      <td>Pending</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Exam 1</td>
-      <td>2022/3/12</td>
-      <td>Pending</td>
-    </tr> -->
+<?php
+
+
+?>
+   
   </tbody>
 </table>
+
     </div>
 </main>
+<?php
 
+
+
+if(isset($_POST['btnActive']))
+{
+  echo $_POST['btnActive'];
+  $Acid =$_POST['btnActive'];
+    $query="UPDATE `exam` SET `Examcol`='Active' WHERE Eid =".$Acid."";
+$connect =mysqli_query($conn,$query);
+// echo '<script>alert("Exam Activate")</script>';
+
+echo '<script>alert("Exam Activate")</script>';
+        echo' <script language="Javascript">';
+        echo'  window.location = "admin.php";';
+        echo'  </script>';
+
+}
+?>
+
+<?php
+if(isset($_POST['btnDeActive']))
+{
+  echo $_POST['btnDeActive'];
+  $DeAcid =$_POST['btnDeActive'];
+    $query="UPDATE `exam` SET `Examcol`='Closed' WHERE Eid =".$DeAcid."";
+$connect =mysqli_query($conn,$query);
+// echo '<script>alert("Exam Activate")</script>';
+
+echo '<script>alert("Exam Closed")</script>';
+        echo' <script language="Javascript">';
+        echo'  window.location = "admin.php";';
+        echo'  </script>';
+
+}
+
+?>
    
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
