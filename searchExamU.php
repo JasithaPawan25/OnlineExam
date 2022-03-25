@@ -76,8 +76,11 @@ if(!isset($_SESSION['LoginUser']))
 
 <main>
     <div class="container">
- 
+    <br><br><h2>Search Result</h2>
+    </div>
+    <div class="container">
     <table class="table">
+    
   <thead>
     <tr>
       <th scope="col">ExamID</th>
@@ -91,8 +94,24 @@ if(!isset($_SESSION['LoginUser']))
   <tbody>
 
   <?php
-$query="SELECT * FROM `exam` ORDER BY Eid DESC";
-$connect =mysqli_query($conn,$query);
+
+if(($_GET['searchExam']))
+{
+ //echo $_GET['searchExam'];
+  $SearchID =$_GET['searchExam'];
+
+
+
+//   $query="SELECT `PID`, `pCode`, `pName`, `pCategory`,
+//                      `pPrice`, `pCover`, `pDescription` FROM `product`
+//                       WHERE(`pName` LIKE '%".$SearchID."%') 
+//                       OR (`pDescription` LIKE '%".$SearchID."%')";
+$queryy ="SELECT `Eid`, `ExamName`, `SDate`, `Duration`, `Examcol`
+ FROM `exam` WHERE (`ExamName` LIKE '%".$SearchID."%')";
+
+
+//$query="SELECT * FROM `exam` ORDER BY Eid DESC";
+$connect =mysqli_query($conn,$queryy);
 $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 // $stmt=$conn->prepare($query);
 // $stmt->execute();
@@ -119,6 +138,9 @@ foreach($data as $value)
       //  echo $Activeid;
      
        
+
+}
+
 
 }
 ?>

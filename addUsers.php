@@ -28,7 +28,7 @@ session_start();
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="admin.php">Exams</a>
+          <a class="nav-link " aria-current="page" href="admin.php">Exams</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="makingExams.php">Make Paper</a>
@@ -53,15 +53,15 @@ session_start();
         </li>
 
         <li class="nav-item">
-          <a class="nav-link " href="addUsers.php">Users</a>
+          <a class="nav-link active" href="addUsers.php">Users</a>
         </li>
 
         <form action="" method="POST">
         <li><button name="btnlogOut" class="btn btn-primary">LogOut</button></li></form>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+      <form method="GET" action="searchExamU.php" class="d-flex">
+      <input class="form-control me-2" type="text" name="searchExam" placeholder="Search Exam" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit" value="search">Search</button>
       </form>
     </div>
   </div>

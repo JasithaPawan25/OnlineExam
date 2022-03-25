@@ -16,7 +16,7 @@ if(!isset($_SESSION['LoginUser']))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExamSchedule</title>
+    <title>ExamSearch</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
 </head>
@@ -125,7 +125,8 @@ echo  $_SESSION['LoginUser'];
 
 <div class="container">
     <br><br>
-    <h2><var>Exam Table</var></h2>
+    <h2><var>Search Result</var></h2>
+
 
     <table class="table">
   <thead>
@@ -193,9 +194,25 @@ echo '<br>';
 
 $today= date('Y-m-d');
 
-$query="SELECT * FROM `exam` ORDER BY Eid DESC";
+
+
+if(($_GET['searchExam']))
+{
+ //echo $_GET['searchExam'];
+  $SearchID =$_GET['searchExam'];
+
+
+
+//   $query="SELECT `PID`, `pCode`, `pName`, `pCategory`,
+//                      `pPrice`, `pCover`, `pDescription` FROM `product`
+//                       WHERE(`pName` LIKE '%".$SearchID."%') 
+//                       OR (`pDescription` LIKE '%".$SearchID."%')";
+$queryy ="SELECT `Eid`, `ExamName`, `SDate`, `Duration`, `Examcol`
+ FROM `exam` WHERE (`ExamName` LIKE '%".$SearchID."%')";
+
+// $query="SELECT * FROM `exam` ORDER BY Eid DESC";
 // $query="SELECT * FROM `exam` WHERE `SDate`='$dateNow' ORDER BY Eid DESC";
-$connect =mysqli_query($conn,$query);
+$connect =mysqli_query($conn,$queryy);
 $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 // $stmt=$conn->prepare($query);
 // $stmt->execute();
@@ -211,6 +228,13 @@ foreach($data as $value)
        echo"</tr>";
 
 }
+
+}
+else
+{
+  echo  '<h2><var>Not Found</var></h2>';
+}
+
 ?>
 
 
