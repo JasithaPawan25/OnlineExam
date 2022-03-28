@@ -1,3 +1,17 @@
+<?php
+require 'connectiondb.php';
+session_start();
+
+
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,9 +75,79 @@
   </div>
 </nav>
 
+
+
+
+
+<?php
+ $query="SELECT * FROM `exam` WHERE `Examcol` ='Active' ORDER BY Eid DESC  ";
+ $connect =mysqli_query($conn,$query);
+ $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+ // $stmt=$conn->prepare($query);
+ // $stmt->execute();
+ // $result = $stmt-> fetchAll();
+ 
+ 
+ foreach($data as $value)
+ { 
+  $ExamDuration= $value['Duration'];
+      $Activeid=$value['Eid'];
+      $DeActiveid=$value['Eid'];
+      $ExamName =$value['ExamName'];
+      $startTime = $value['SDate'];
+   //$value['Eid'] =$Activeid;
+  //  echo "<tr>";
+  //      echo"	<td>".$value['Eid']."</td>";	
+  //      echo"	<td>".$value['ExamName']."</td>";
+  //      echo"	<td>".$value['SDate']."</td>";
+  //      // echo"	<td>".$value['Duration']."</td>";
+  //      echo"	<td>".$value['Examcol']."</td>";
+  //      // echo"	<td>".$value['Examcol']."</td>";
+  //      echo "<td><form method='POST'>
+  //      <button name='btnActive' class='btn btn-primary' value='".$Activeid."'>Open</button></td>;
+  //      <td><button name='btnDeActive' class='btn btn-primary' value='".$DeActiveid."'>Close</button></form></td>";
+  //      echo"</tr>";
+ 
+       //  echo $Activeid;
+      
+        
+ 
+ }
+ ?>
+
+
+
+<?php
+
+date_default_timezone_set('Asia/Colombo');
+
+ $_SESSION['duration']=$ExamDuration;
+// echo $ExamDuration;
+$_SESSION['start_time']=date("Y-m-d H:i:s");
+ $end_time= date('Y-m-d H:i:s', strtotime("+".$_SESSION['duration'].'minutes',strtotime($_SESSION['start_time'])));
+$_SESSION['end_time']=$end_time;
+
+
+?>
+
+<!-- <h2><div id=rsponse></div></h2> -->
+<script type="text/javascript">
+setInterval(function()
+  {
+    var xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET","response.php",false);
+    xmlhttp.send(null);
+    document.getElementById("response").innerHTML=xmlhttp.responseText;
+  },1000);
+
+
+</script>
+
+
+
 <div class="container">
     <br>
-    <h1>Exam Name</h1>
+    <h1><?php echo  $ExamName ?></h1>
 
 <div class="form1">
 <div class="mb-3">
@@ -71,20 +155,41 @@
   <!-- <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder"> -->
     <h2>15/20</h2>
 </div>
+
+
 <div class="mb-3">
   <label for="formGroupExampleInput2" class="form-label">Time Left</label>
   <!-- <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder"> -->
-    <h2>--/--</h2>
+    <h2><div id=response></div></h2>
+
+    <!-- <script type="text/javascript">
+setInterval(function()
+  {
+    var xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET","response.php",false);
+    xmlhttp.send(null);
+    document.getElementById("response").innerHTML=xmlhttp.responseText;
+  },1000);
+
+
+</script> -->
 </div>
 
 </div>
 
 <div class="form1">
 <div class="mb-3">
-  <label for="formGroupExampleInput" class="form-label">Start Time</label>
+  <label for="formGroupExampleInput" class="form-label">Satrt Time</label>
   <!-- <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder"> -->
-  <h2>--/--</h2>
+  <h2><?php echo $startTime?></h2>
 </div>
+
+<div class="mb-3">
+  <label for="formGroupExampleInput2" class="form-label">Duration(Mins)</label>
+  <!-- <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder"> -->
+    <h2><?php echo $ExamDuration?></h2>
+</div>
+
 <div class="mb-3">
   <label for="formGroupExampleInput2" class="form-label">End Time</label>
   <!-- <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder"> -->

@@ -4,24 +4,8 @@ require 'connectiondb.php';
 session_start();
 
 
-if(isset($_GET['page']))
-{
-  $page =$_GET['page'];
-}
-else
-{
-  $page=1;
-}
-
-$num_per_page=1;
-$start_from=($page -1)*1;
-echo $start_from;
 
 
-if(isset($_SESSION[`quizcheck`][$queno]))
-{
-  $answ=($_SESSION[`quizcheck`][$queno]);
-}
 
 
 
@@ -244,31 +228,24 @@ setInterval(function()
           }
         </style>
 
-<?php
 
 
 
-
- ?>
-
-
-<form action="newpage.php" method="POST">
+<form action="" method="POST">
     <div class="quizpaper">
         <div class="card" id="questions" style="width: 35rem;">
   <!-- <img src="./images/login.png" class="card-img-top" width="10" height="10" alt="..."> -->
   <div class="card-body">
 
   <?php
-  
 
-    $query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid ORDER BY Qid ASC limit $start_from,$num_per_page";
+    $query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid ORDER BY Qid ASC";
     $connect =mysqli_query($conn,$query);
     $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 
     //SELECT `Qid`, `Quiz`, `Choice_i`, `Choice_ii`, `
     // Choice_iii`, `Choice_iv`, `Answer`, `Exam_Eid` FROM 
     // `question` WHERE 1
-    $r=0;
   // ['.$value['Qid'].']
     foreach($data as $value)
     {
@@ -276,69 +253,27 @@ setInterval(function()
       $Examid = $value['Exam_Eid'];
     
 
-    echo  '  <h5 class="card-title">Q.'.$value['Quiz'].'</h5>
+    // echo  '  <h5 class="card-title">Q.'.$value['Quiz'].'</h5>
           
-        <label class="container">';
-     echo '   <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_i'].'" onclick="radioclick(this.value, echo '.$quizID.')" '; 
-     
-     if($aws=$value['Choice_i'])
-     {
-        echo 'checked';
-     }
-    // if($answ==$value['Choice_i'])
-    // {
-    //  echo 'checked';
-    // }
-     
-     
-    echo ' >'.$value['Choice_i'].' ';
+    //     <label class="container">';
+    //  echo '   <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_i'].'"    >'.$value['Choice_i'].' ';
 
-       
-
-
-     echo '    </label>
+    //  echo '    </label>
       
-        <label class="container">
-        <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_ii'].'"  ';
-        
-        
-        if($answ==$value['Choice_iv'])
-        {
-          $answ=($_SESSION[`quizcheck`][$quizID]);
-        }
-        
-        echo ' >'.$value['Choice_ii'].'
+    //     <label class="container">
+    //     <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_ii'].'">'.$value['Choice_ii'].'
 
-        </label>';
+    //     </label>';
 
-        echo '     <label class="container">
-        <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_iii'].'" ';
-        
-        if($value['Choice_iii']!=NULL)
-        {
-          $answ=($_SESSION[`quizcheck`][$quizID]);
-        }
-        
-        
-        
-        echo '>'.$value['Choice_iii'].'
+    //     echo '     <label class="container">
+    //     <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_iii'].'">'.$value['Choice_iii'].'
 
-        </label>
+    //     </label>
 
-        <label class="container">
-        <input type="radio" name="quizcheck['.$quizID.']"  value="'.$value['Choice_iv'].'"  ';
+    //     <label class="container">
+    //     <input type="radio" name="quizcheck['.$quizID.']"  value="'.$value['Choice_iv'].'" >  '.$value['Choice_iv'].'
         
-        if($answ==$value['Choice_iv'])
-        {
-          $answ=($_SESSION[`quizcheck`][$quizID]);
-        }
-        
-        
-        
-        
-        echo '    >  '.$value['Choice_iv'].'
-        
-        </label>';
+    //     </label>';
 
 
       //   if ($_POST[$quizID] == $value["Answer"])
@@ -354,7 +289,6 @@ setInterval(function()
 
       //   echo $value['Qid'];
 
-      $r++;
   
     }
 
@@ -375,10 +309,6 @@ setInterval(function()
 
 
 
-
-
-
-
   ?>
 
   <style>
@@ -393,51 +323,19 @@ setInterval(function()
 
 
 
-<!-- <button type="submit" name="btnsave" value="submit" class="btn btn-primary">Submit</button>  -->
 
 
-   <button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button> 
-   
-   <?php
-   
-   $pr_query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid";
-   $pr_result =mysqli_query($conn,$pr_query);
-   $total_records=mysqli_num_rows($pr_result);
- //   echo $total_records;
+   <!-- <button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button>  -->
  
-   $total_page= $total_records/$num_per_page;
-    echo '<br>'.$total_page.'<br>';
  
-   if($page>1)
-   {
-   //  echo '<div class="container"><label id="Back" class="container">';
-       echo " <form method='POST'><button type='submit' name='btn_next'> <a href='examPaper.php?page=".($page-1)."' class='btn btn-primary'>Previous</a>  </button>";
-    //   echo '</form></div></div>';
-   }
-
-   
- 
-   for($i=1;$i<$total_page;$i++)
-   {
-       echo "<a href='examPaper.php?page=".$i."' class='btn btn-primary'>".$i."</a>";
-   }
- 
-   if($i>$page)
-   { 
-    // echo '<div class="container"><label id="Next" class="container">';
-       echo "<form method='POST'><button type='submit' name='btn_next'><a href='examPaper.php?page=".($page+1)."' class='btn btn-primary'>Next</a></button>";
-    //   echo '</form></div></div>';
-   }
-   
-   
-   ?>
-
-  
    <!-- <br> <br><button class="btn btn-primary">Submit</button>  -->
   <br><br>
   <!-- <button type="button" name="submit"  value="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
  Submit
 </button> -->
+
+
+
   </div>
 </div>
 
@@ -446,65 +344,6 @@ setInterval(function()
 </form>
 
     </div>
-
-
-
-
-
-    <?php
-  
-  $pr_query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid";
-  $pr_result =mysqli_query($conn,$pr_query);
-  $total_records=mysqli_num_rows($pr_result);
-//   echo $total_records;
-
-  $total_page= $total_records/$num_per_page;
-//    echo '<br>'.$total_page.'<br>';
-
-  if($page>1)
-  {
-  //  echo '<div class="container"><label id="Back" class="container">';
-   //   echo " <form method='POST'><button type='submit' name='btn_next'> <a href='examPaper.php?page=".($page-1)."' class='btn btn-primary'>Previous</a>  </button>";
-   //   echo '</form></div></div>';
-  }
-
-  for($i=1;$i<$total_page;$i++)
-  {
-    //  echo "<a href='example.php?page=".$i."' class='btn btn-primary'>".$i."</a>";
-  }
-
-  if($i>$page)
-  { 
-  //  echo '<div class="container"><label id="Next" class="container">';
-    //  echo "<form method='POST'><button type='submit' name='btn_next'><a href='examPaper.php?page=".($page+1)."' class='btn btn-primary'>Next</a></button>";
-   //   echo '</form></div></div>';
-  }
-
-//  echo '<form method="POST"><button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button></form>'; 
-
-
-
-
-?>
-
-<style>
-  #Next
-  {
-    margin-left: 50%;
-    margin-top: 50px;
-  }
-
-  #Back
-  {
-    margin-top: 50px;
-    
-    margin-left: 10%;
-  }
-</style>
-
-
-
-
 
 
 
@@ -530,6 +369,9 @@ setInterval(function()
 
 if(isset($_POST['submit']))
 {
+
+
+
   echo $ExamName;
   print_r($_POST['quizcheck']);
 
@@ -556,9 +398,12 @@ if(isset($_POST['submit']))
     $CorrectAns = 0;
   	$WrongAns = 0;
     $count =0;
+
+
+    // echo  '  <h5 class="card-title">Q.'.$value['Quiz'].'</h5>';
     
 
-    echo '<br> '.$value['Qid'].'  '.$value['Answer'].'  <br>  ';
+    // echo '<br> '.$value['Qid'].'  '.$value['Answer'].'  <br>  ';
     //  echo ' '.$value['Answer'].'<br>'; 
    // $numbOfQiz = count($value['Qid']);
 
@@ -600,14 +445,16 @@ if(isset($_POST['submit']))
 
                             if ($_POST['quizcheck'][$value['Qid']] == $value['Answer'])
                             {
-                             echo 'Correct Answer';
+                                $correctAnswer= 'Correct Answer';
+                             echo $correctAnswer;
                               $CorrectAns++;
 
                                $i++;
                             }
                             else
                             {
-                             echo 'Wrong Answer';
+                                $wrongAnswer= 'Wrong Answer';
+                             echo $wrongAnswer;
                               $WrongAns ++;	
 
                               $quizCounter++;
@@ -688,12 +535,16 @@ if(isset($_POST['submit']))
     $NumofQss = $i + $quizCounter;
     $toTotal = ($i / $NumofQss)*100;
 
-echo ($NumofQs);
+  // echo ($NumofQs);
   echo '<br>Your marks'.$toTotal.'%<br>';
   echo '<br>Quiz Counter'.$NumofQss.'<br>';
 
   echo 'your Score is '.$i.'';
   echo '<br>your have answered'.$countt.'';
+
+  echo '</div>';
+  echo '</div>';
+  echo '</div>';
 
   // $NumofQs = $CorrectAns + $WrongAns;
   // $Total = ($CorrectAns / $NumofQs);
@@ -721,11 +572,67 @@ echo ($NumofQs);
 
 }
 
+   echo ' <div class=container>
+    <div class="card">
+<h5 class="card-header">'.$ExamName.'</h5>
+<div class="card-body">
+  <h5 class="card-title">Your Marks - '.(intval($toTotal)).'%</h5>
+  <h6 class="card-title">Number of questions in the paper- '.$NumofQss.'</h6>
+  <h6 class="card-title">Number of questions you have answered- '.$countt.'</h6>
+  <h6 class="card-title">Number of right answerers- '.$i.'</h6>
+  <p class="card-text"></p>
+
+  <form method="POST">
+  <input type="submit"  name="btnclose" class="btn btn-primary"/>Close</input>
+  </form>
+</div>
+</div>
+</div>';
+
+
+//   <a href="index.php" class="btn btn-primary">Close</a>
+
+
+
+
 
 
 
 
 ?>
+
+
+
+
+
+<?php
+
+if(isset($_POST['btnclose']))
+{
+
+    echo '<script>alert("Hope you enjoy :)")</script>';
+    echo' <script language="Javascript">';
+    echo'  window.location = "index.php";';
+    echo'  </script>';
+
+    
+        $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
+        $connect =mysqli_query($conn,$query);
+
+
+    // $query="SELECT * FROM `exam` WHERE `Examcol`='close'";
+    // $connect =mysqli_query($conn,$query);
+
+
+}
+
+
+
+
+
+?>
+
+
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
