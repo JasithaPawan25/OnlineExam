@@ -1,7 +1,7 @@
 <?php
 require 'connectiondb.php';
 session_start();
-if(!isset($_SESSION['LoginUser']))
+if(!isset($_SESSION['LoginUserad']))
 {
   header("location:login.php");
 
@@ -61,12 +61,14 @@ if(!isset($_SESSION['LoginUser']))
   </div>
 </nav>
 
+
+
       <?php
 
 
       if(isset($_POST['btnlogOut']))
       {
-      unset($_SESSION['LoginUser']);
+      unset($_SESSION['LoginUserad']);
           header("location:login.php");
       }
       ?>
@@ -75,6 +77,10 @@ if(!isset($_SESSION['LoginUser']))
 
 
 <main>
+
+<?php
+echo  $_SESSION['LoginUserad'];
+?>
     <div class="container">
  
     <table class="table">

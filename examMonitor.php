@@ -1,5 +1,6 @@
 <?php
 require 'connectiondb.php';
+ error_reporting(0);
 session_start();
 
 
@@ -75,18 +76,43 @@ session_start();
   </div>
 </nav>
 
+<?
+ $quy="SELECT * FROM `exam` WHERE `Examcol` ='Active' ORDER BY Eid DESC";
+ $connect =mysqli_query($conn,$quy);
+ $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+ foreach($data as $value)
+ { 
+  $Examid=$value['Eid'];
+  $ExamDurationss=$value['Duration'];
+ }
+
+ echo $Examid;
+ echo $ExamDurationss;
+
+ if($ExamDurationss!=0)
+ {
+   echo 'sdsd';
+ }
+
+
+?>
+
 
 
 
 
 <?php
+
+
+
  $query="SELECT * FROM `exam` WHERE `Examcol` ='Active' ORDER BY Eid DESC  ";
  $connect =mysqli_query($conn,$query);
  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
  // $stmt=$conn->prepare($query);
  // $stmt->execute();
  // $result = $stmt-> fetchAll();
- 
+
+
  
  foreach($data as $value)
  { 
@@ -130,7 +156,15 @@ $_SESSION['end_time']=$end_time;
 
 ?>
 
-<!-- <h2><div id=rsponse></div></h2> -->
+<?php
+
+if($ExamDuration!=0)
+{
+   $ExamDurations=$ExamDuration*60*1000;
+
+?>
+
+<h2><div id=reponse></div></h2>
 <script type="text/javascript">
 setInterval(function()
   {
@@ -141,7 +175,86 @@ setInterval(function()
   },1000);
 
 
+  function redirectpage()
+  {
+    window.location="admin.php";
+    <?php
+    $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
+    $connect =mysqli_query($conn,$query);
+    ?>
+  }
+  setTimeout('redirectpage()',<?php echo $ExamDurations ?>);
+
+
 </script>
+
+
+<?php
+
+
+$queryAllstudent="SELECT `Uid` FROM `user` WHERE `UserStatus` ='student'";
+
+  $connect =mysqli_query($conn,$queryAllstudent);
+  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+  foreach($data as $value)
+ { 
+  //  echo $value['Uid'];
+  
+
+ }
+
+ $rowcount = mysqli_num_rows($connect);
+//  printf("Total rows in this table :  %d\n", $rowcount);
+
+
+  // if( $connect =mysqli_query($conn,$queryAllstudent))
+  // {
+  //   $rowcount = mysqli_num_rows($connect);
+
+  //   printf("Total rows in this table :  %d\n", $rowcount);
+    
+  // }
+
+//  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+
+// $Allstudents= count(mysqli_num_rows($data))
+
+
+
+// $sql = "SELECT * from building";
+
+// if ($result = mysqli_query($con, $sql)) {
+
+    // Return the number of rows in result set
+    // $rowcount = mysqli_num_rows( $result );
+    
+    // Display result
+    // printf("Total rows in this table :  %d\n", $rowcount);
+ 
+
+?>
+
+<?php
+
+$queryExamdidstudent="SELECT  `User_Uid` FROM `user_exam` WHERE `Exam_Eid` ='$Activeid'";
+
+
+  $connect =mysqli_query($conn,$queryExamdidstudent);
+  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+  foreach($data as $value)
+ { 
+    $studentfinished=$value['User_Uid'];
+    echo $studentfinished;
+  
+
+ }
+
+ $rowcountExamdidstudent = mysqli_num_rows($connect);
+//  printf("Total rows in this table :  %d\n", $rowcountExamdidstudent);
+
+
+
+?>
 
 
 
@@ -153,7 +266,7 @@ setInterval(function()
 <div class="mb-3">
   <label for="formGroupExampleInput" class="form-label">Exam Completed</label>
   <!-- <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder"> -->
-    <h2>15/20</h2>
+    <h2><?php echo $rowcountExamdidstudent?>/<?php echo $rowcount ?></h2>
 </div>
 
 
@@ -198,11 +311,75 @@ setInterval(function()
 
 </div>
 
+<?php
 
-<div class="form2">
+echo $studentfinished;
+echo $Activeid;
+echo ' <div class="form2">
+<div class="mb-3">
+  <label for="formGroupExampleInput" class="form-label"><h2>Student Attendance</h2></label>';
+ 
+      
+
+$queryStudentFinished="SELECT  `User_Uid` FROM `user_exam` WHERE `Exam_Eid` =".$Activeid."";
+$connect =mysqli_query($conn,$queryStudentFinished);
+$data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+foreach($data as $value)
+{
+
+  // echo '<label class="container"><h3><em>'.$value['User_Uid'].'</em></h3></label>';
+
+  $studentfinishedd=$value['User_Uid'];
+
+$queryStudentFinished="SELECT  `UserName` FROM `user` WHERE `Uid` =".$studentfinishedd."";
+
+// echo ' <div class="form2">
+// <div class="mb-3">
+//   <label for="formGroupExampleInput" class="form-label"><h2>Student Attendance</h2></label>';
+ 
+      
+ 
+ 
+  $connect =mysqli_query($conn,$queryStudentFinished);
+  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+  foreach($data as $value)
+ {
+   // echo $value['UserName'];
+// echo'<input type="readonly" class="form-control" value="'.$value['UserName'].'" id="formGroupExampleInput" placeholder="Example input placeholder">';
+echo '<label class="container"><h3><em>'.$value['UserName'].'</em></h3></label>';
+
+ }
+}
+
+ echo '</div>';
+
+ echo '<form method="POST"> <button class="btn btn-outline-success" type="submit">End the Exam</button>
+ </button></div>';
+
+
+ if(isset($_POST['submit']))
+ {
+  echo '<script>alert("Exam End:)")</script>';
+  echo' <script language="Javascript">';
+  echo'  window.location = "index.php";';
+  echo'  </script>';
+
+  
+      $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
+      $connect =mysqli_query($conn,$query);
+ }
+
+
+
+
+
+?>
+
+
+<!-- <div class="form2">
 <div class="mb-3">
   <label for="formGroupExampleInput" class="form-label">Student Attendance</label>
-  <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
+  <input type="readonly" class="form-control" value="sdsdsd" id="formGroupExampleInput" placeholder="Example input placeholder">
   <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
   <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
   <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
@@ -212,8 +389,15 @@ setInterval(function()
 <button class="btn btn-outline-success" type="submit">End the Exam</button>
 </div>
 
-</div>
+</div> -->
   
+<?php
+}
+else
+{
+  echo '<div class="container"><h1>No Exam to Mointor</h1></div>';
+}
+?>
 
 
 

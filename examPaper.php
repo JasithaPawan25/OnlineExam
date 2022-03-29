@@ -4,24 +4,7 @@ require 'connectiondb.php';
 session_start();
 
 
-if(isset($_GET['page']))
-{
-  $page =$_GET['page'];
-}
-else
-{
-  $page=1;
-}
 
-$num_per_page=1;
-$start_from=($page -1)*1;
-echo $start_from;
-
-
-if(isset($_SESSION[`quizcheck`][$queno]))
-{
-  $answ=($_SESSION[`quizcheck`][$queno]);
-}
 
 
 
@@ -33,9 +16,10 @@ $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 // $result = $stmt-> fetchAll();
 foreach($data as $value)
 {
-  $Examid = $value['Eid'];
+  $Examidi = $value['Eid'];
   $ExamDuration= $value['Duration'];
 }
+
  //T
 
 $ExamDuration;
@@ -57,8 +41,8 @@ $examMinutes;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="refresh" content="
-   php echo $examMinutes -->
+    <!-- <meta http-equiv="refresh" content="<?php echo $examMinutes?>,url=http://localhost/OnlineExam/index.php"> -->
+   <!-- php echo $examMinutes -->
 
     <!-- url=http://localhost/OnlineExam/index.php" --> 
     <title>E-Paper</title>
@@ -69,7 +53,7 @@ $examMinutes;
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">ONLINE EXAM APP</a>
+    <a class="navbar-brand" href="index.php">ONLINE EXAM APP</a>
     
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
      
@@ -94,6 +78,9 @@ $examMinutes;
 
 $loginUser = $_SESSION['LoginUser'];
 echo $loginUser;
+echo $Examidi;
+
+
 ?>
 
 
@@ -119,6 +106,10 @@ echo $loginUser;
  // CURDATE();
  
  $today= date('Y-m-d');
+
+ if($ExamDuration!=0)
+ {
+    echo 'fdfdf';
  
  
  $query="SELECT * FROM `exam` WHERE `Examcol`='Active'";
@@ -160,6 +151,9 @@ echo $loginUser;
  
  }
 
+
+
+
 // echo $Examid;
 // echo $ExamDuration;
 
@@ -174,6 +168,9 @@ $_SESSION['end_time']=$end_time;
 
 // $end_time= date('Y-m-d H:i:s', strtotime("+".$_SESSION['duration'].'minutes'));
 //  $end_time=($_SESSION['duration']);
+
+
+$ExamDurations=$ExamDuration*60*1000;
 
 ?>
 
@@ -191,9 +188,35 @@ setInterval(function()
 
 
 
+  function redirectpage()
+  {
+    window.location="index.php";
+    <?php
+    // $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
+    // $connect =mysqli_query($conn,$query);
+    ?>
+  }
+  setTimeout('redirectpage()',<?php echo $ExamDurations ?>);
+
+ 
+
+
+
+
+
+
+
 
 </script>
+
+
+
+
+
 <?php 
+
+
+
 
     $examMinutes=$ExamDuration*60*1000;
     echo $examMinutes;
@@ -251,8 +274,9 @@ setInterval(function()
 
  ?>
 
+ 
 
-<form action="newpage.php" method="POST">
+<form action="newpage.php?rowid=<?php echo $Examidi?>" method="POST">
     <div class="quizpaper">
         <div class="card" id="questions" style="width: 35rem;">
   <!-- <img src="./images/login.png" class="card-img-top" width="10" height="10" alt="..."> -->
@@ -261,7 +285,7 @@ setInterval(function()
   <?php
   
 
-    $query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid ORDER BY Qid ASC limit $start_from,$num_per_page";
+    $query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid ORDER BY Qid ASC ";
     $connect =mysqli_query($conn,$query);
     $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 
@@ -274,6 +298,12 @@ setInterval(function()
     {
       $quizID= $value['Qid'];
       $Examid = $value['Exam_Eid'];
+
+
+      echo '<div id="sliderset">';
+      echo'<div class="slideshow-container">
+  
+            <div class="mySlides">';
     
 
     echo  '  <h5 class="card-title">Q.'.$value['Quiz'].'</h5>
@@ -281,14 +311,7 @@ setInterval(function()
         <label class="container">';
      echo '   <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_i'].'" onclick="radioclick(this.value, echo '.$quizID.')" '; 
      
-     if($aws=$value['Choice_i'])
-     {
-        echo 'checked';
-     }
-    // if($answ==$value['Choice_i'])
-    // {
-    //  echo 'checked';
-    // }
+    
      
      
     echo ' >'.$value['Choice_i'].' ';
@@ -300,46 +323,27 @@ setInterval(function()
       
         <label class="container">
         <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_ii'].'"  ';
-        
-        
-        if($answ==$value['Choice_iv'])
-        {
-          $answ=($_SESSION[`quizcheck`][$quizID]);
-        }
-        
+      
         echo ' >'.$value['Choice_ii'].'
 
         </label>';
 
         echo '     <label class="container">
         <input type="radio"  name="quizcheck['.$quizID.']" value="'.$value['Choice_iii'].'" ';
-        
-        if($value['Choice_iii']!=NULL)
-        {
-          $answ=($_SESSION[`quizcheck`][$quizID]);
-        }
-        
-        
-        
+  
         echo '>'.$value['Choice_iii'].'
 
         </label>
 
         <label class="container">
         <input type="radio" name="quizcheck['.$quizID.']"  value="'.$value['Choice_iv'].'"  ';
-        
-        if($answ==$value['Choice_iv'])
-        {
-          $answ=($_SESSION[`quizcheck`][$quizID]);
-        }
-        
-        
-        
-        
+    
         echo '    >  '.$value['Choice_iv'].'
         
         </label>';
 
+        echo'</div>';
+        echo'</div>';
 
       //   if ($_POST[$quizID] == $value["Answer"])
       //   {
@@ -373,6 +377,9 @@ setInterval(function()
 //         echo "Error";
 //     }
 
+echo '  <a class="prev" onclick="plusSlides(-1)">❮</a>
+<a class="next" onclick="plusSlides(1)">❯</a>';
+
 
 
 
@@ -396,38 +403,41 @@ setInterval(function()
 <!-- <button type="submit" name="btnsave" value="submit" class="btn btn-primary">Submit</button>  -->
 
 
-   <button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button> 
+ <button type="submit" name="submit" value="submit"  class="btn btn-primary">
+ 
+<a href="newpage.php?rowid=<?php echo $Examidi?>"></a>Submit </button>
    
    <?php
+  
    
-   $pr_query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid";
-   $pr_result =mysqli_query($conn,$pr_query);
-   $total_records=mysqli_num_rows($pr_result);
- //   echo $total_records;
+//    $pr_query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid";
+//    $pr_result =mysqli_query($conn,$pr_query);
+//    $total_records=mysqli_num_rows($pr_result);
+//  //   echo $total_records;
  
-   $total_page= $total_records/$num_per_page;
-    echo '<br>'.$total_page.'<br>';
+//    $total_page= $total_records/$num_per_page;
+//     echo '<br>'.$total_page.'<br>';
  
-   if($page>1)
-   {
+//    if($page>1)
+//    {
    //  echo '<div class="container"><label id="Back" class="container">';
-       echo " <form method='POST'><button type='submit' name='btn_next'> <a href='examPaper.php?page=".($page-1)."' class='btn btn-primary'>Previous</a>  </button>";
+      //  echo " <form method='POST'><button type='submit' name='btn_next'> <a href='examPaper.php?page=".($page-1)."' class='btn btn-primary'>Previous</a>  </button>";
     //   echo '</form></div></div>';
-   }
+  //  }
 
    
  
-   for($i=1;$i<$total_page;$i++)
-   {
-       echo "<a href='examPaper.php?page=".$i."' class='btn btn-primary'>".$i."</a>";
-   }
+  //  for($i=1;$i<$total_page;$i++)
+  //  {
+  //      echo "<a href='examPaper.php?page=".$i."' class='btn btn-primary'>".$i."</a>";
+  //  }
  
-   if($i>$page)
-   { 
+  //  if($i>$page)
+  //  { 
     // echo '<div class="container"><label id="Next" class="container">';
-       echo "<form method='POST'><button type='submit' name='btn_next'><a href='examPaper.php?page=".($page+1)."' class='btn btn-primary'>Next</a></button>";
+      //  echo "<form method='POST'><button type='submit' name='btn_next'><a href='examPaper.php?page=".($page+1)."' class='btn btn-primary'>Next</a></button>";
     //   echo '</form></div></div>';
-   }
+  //  }
    
    
    ?>
@@ -453,32 +463,32 @@ setInterval(function()
 
     <?php
   
-  $pr_query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid";
-  $pr_result =mysqli_query($conn,$pr_query);
-  $total_records=mysqli_num_rows($pr_result);
+  // $pr_query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid";
+  // $pr_result =mysqli_query($conn,$pr_query);
+  // $total_records=mysqli_num_rows($pr_result);
 //   echo $total_records;
 
-  $total_page= $total_records/$num_per_page;
+  // $total_page= $total_records/$num_per_page;
 //    echo '<br>'.$total_page.'<br>';
 
-  if($page>1)
-  {
+  // if($page>1)
+  // {
   //  echo '<div class="container"><label id="Back" class="container">';
    //   echo " <form method='POST'><button type='submit' name='btn_next'> <a href='examPaper.php?page=".($page-1)."' class='btn btn-primary'>Previous</a>  </button>";
    //   echo '</form></div></div>';
-  }
+  // }
 
-  for($i=1;$i<$total_page;$i++)
-  {
+  // for($i=1;$i<$total_page;$i++)
+  // {
     //  echo "<a href='example.php?page=".$i."' class='btn btn-primary'>".$i."</a>";
-  }
+  // }
 
-  if($i>$page)
-  { 
+  // if($i>$page)
+  // { 
   //  echo '<div class="container"><label id="Next" class="container">';
     //  echo "<form method='POST'><button type='submit' name='btn_next'><a href='examPaper.php?page=".($page+1)."' class='btn btn-primary'>Next</a></button>";
    //   echo '</form></div></div>';
-  }
+  // }
 
 //  echo '<form method="POST"><button type="submit" name="submit" value="submit" class="btn btn-primary">Submit</button></form>'; 
 
@@ -768,6 +778,16 @@ echo ($NumofQs);
   </div>
 </div>
 
+<?php
+ }
+ else
+ {
+   echo '<div class="container"><h1>No Exam </h1></div>';
+ }
+?>
+
+
+
 
 
 
@@ -796,3 +816,148 @@ echo ($NumofQs);
 
 
 ?>
+
+
+<style>
+* {box-sizing: border-box}
+body {margin:0}
+
+#sliderSet
+{
+  margin-top: 200px;
+}
+
+/* Slideshow container */
+.slideshow-container {
+  position: relative;
+  background: #f1f1f1f1;
+
+}
+
+/* Slides */
+.mySlides {
+  display: none;
+  padding: 80px;
+  text-align: center;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -30px;
+  padding: 16px;
+  color: #888;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  position: absolute;
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+  color: white;
+}
+
+/* The dot/bullet/indicator container */
+.dot-container {
+    text-align: center;
+    padding: 20px;
+    background: #ddd;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+/* Add a background color to the active dot/circle */
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Add an italic font style to all quotes */
+q {font-style: italic;}
+
+/* Add a blue color to the author */
+.author {color: cornflowerblue;}
+</style>
+
+
+<!-- <div class="slideshow-container">
+
+<div class="mySlides">
+  <q>I love you the more in that I believe you had liked me for my own sake and for nothing else</q>
+  <p class="author">- John Keats</p>
+</div>
+
+<div class="mySlides">
+  <q>But man is not made for defeat. A man can be destroyed but not defeated.</q>
+  <p class="author">- Ernest Hemingway</p>
+</div>
+
+<div class="mySlides">
+  <q>I have not failed. I've just found 10,000 ways that won't work.</q>
+  <p class="author">- Thomas A. Edison</p>
+</div> -->
+
+<!-- <a class="prev" onclick="plusSlides(-1)">❮</a>
+<a class="next" onclick="plusSlides(1)">❯</a>
+
+</div>
+
+<div class="dot-container">
+  <span class="dot" onclick="currentSlide(1)"></span> 
+  <span class="dot" onclick="currentSlide(2)"></span> 
+  <span class="dot" onclick="currentSlide(3)"></span> 
+</div> -->
+
+<script>
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+</script>
+
+
+
+

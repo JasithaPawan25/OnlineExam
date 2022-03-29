@@ -38,7 +38,7 @@ if(isset($_POST["btnlogin"]))
 
       if($row["UserStatus"]=="admin")
       {
-          $_SESSION['LoginUser'] = $row["UserName"];
+          $_SESSION['LoginUserad'] = $row["UserName"];
         //  $_SESSION['loginUser'] = $row["UserName"];
         header('location:admin.php');
 

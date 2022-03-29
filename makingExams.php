@@ -299,10 +299,69 @@ if(isset($_POST['btnClear']))
   <td>  <input type="text" name="ExName" class="form-control" placeholder="Exam Name" id="inputAnswer"></td>
   <td>  <input type="datetime-local" name="doe" class="form-control" id="inputAnswer"></td>
   <td>  <input type="timer" name="timer" placeholder="time" class="form-control" id="inputAnswer"></td><br>
-  <td colspan="3">   <button type="submit" name="btnPublish" class="btn btn-primary">Publish the Paper</button> </td>
+  <td colspan="3">   <button type="submit" name="btnPublish" class="btn btn-primary">Save the Paper</button> </td>
+ <vh>
+ <tr>
+ <td> 
+   <?php
+   
+   $query="SELECT `Eid`, `ExamName`, `SDate`, `Duration`, `Examcol` FROM `exam` ORDER BY Eid ASC";
+  $connect =mysqli_query($conn,$query);
+ 
+  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+  echo '<select name="Category" class="form-control"> ';
+  foreach($data as $value)
+  {
+    echo $value['ExamName'];
+    echo $value['Eid'];
+    $examIDforDrop=$value['Eid'];
+  
+   
+   ?>
+ 
+
+ 
+  <option value="<?php echo $value['Eid']; ?>">
+  <?php echo $value['ExamName']?>
+  </option>
+  
+
+   <?php
+  }
+   ?>
+     </select>
+ 
+ 
+ <!-- <input type="text" name="ExName" class="form-control" placeholder="Exam Name" id="inputAnswer"></td> -->
+
+ <td colspan="3">   <button type="submit" name="btnQuestion" class="btn btn-primary">Save the Question</button> </td>
+  </tr>
 </table>
 
 </form>
+
+
+
+<?php
+
+if (isset($_POST['btnQuestion']))
+{
+  foreach($quiz as $key=>$value)
+  {
+
+  $queryEditQuestions="INSERT INTO `question`(`Quiz`, `Choice_i`,
+   `Choice_ii`, `Choice_iii`, `Choice_iv`, `Answer`, `Exam_Eid`) 
+  VALUES ('[value-2]','[value-3]','[value-4]',
+  '[value-5]','[value-6]','[value-7]','[value-8]')";
+  $stmt=$conn->prepare($queryEditQuestions);
+
+  }
+
+}
+
+?>
+
+
 
 <?php
 
@@ -319,7 +378,7 @@ if (isset($_POST['btnPublish']))
   $ETimer =$_POST['timer'];
 
   $query1 = "INSERT INTO `exam`(`ExamName`, `SDate`, `Duration`, `Examcol`)
-   VALUES ('$EName','$EDate',' $ETimer ','Active')";
+   VALUES ('$EName','$EDate',' $ETimer ','Scheduled')";
 
 
 

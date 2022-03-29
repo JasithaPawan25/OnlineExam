@@ -1,15 +1,15 @@
 <?php
-error_reporting(0);
+ error_reporting(0);
 require 'connectiondb.php';
 session_start();
 
 
 
 
+$loginUser = $_SESSION['LoginUser'];
+//echo $loginUser;
 
-
-
-$query="SELECT * FROM `exam` WHERE `Examcol`='Active'";
+$query="SELECT * FROM `exam` WHERE `Eid`='$rowid'";
 $connect =mysqli_query($conn,$query);
 $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 // $stmt=$conn->prepare($query);
@@ -19,6 +19,20 @@ foreach($data as $value)
 {
   $Examid = $value['Eid'];
   $ExamDuration= $value['Duration'];
+}
+
+
+$q="SELECT * FROM `user` WHERE `UserName`='$loginUser'";
+$connect =mysqli_query($conn,$q);
+$data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+// $stmt=$conn->prepare($query);
+// $stmt->execute();
+// $result = $stmt-> fetchAll();
+foreach($data as $value)
+{
+  $UserDD = $value['Uid'];
+  echo $UserDD;
+ // $ExamDuration= $value['Duration'];
 }
  //T
 
@@ -53,7 +67,7 @@ $examMinutes;
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">ONLINE EXAM APP</a>
+    <a class="navbar-brand" href="index.php">ONLINE EXAM APP</a>
     
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
      
@@ -78,6 +92,8 @@ $examMinutes;
 
 $loginUser = $_SESSION['LoginUser'];
 echo $loginUser;
+$rowid = $_GET['rowid'];
+echo $rowid;
 ?>
 
 
@@ -105,7 +121,7 @@ echo $loginUser;
  $today= date('Y-m-d');
  
  
- $query="SELECT * FROM `exam` WHERE `Examcol`='Active'";
+ $query="SELECT * FROM `exam` WHERE `Eid`='$rowid'";
  $connect =mysqli_query($conn,$query);
  $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
  // $stmt=$conn->prepare($query);
@@ -138,9 +154,9 @@ echo $loginUser;
           
      echo "   ".$value['ExamName']."</h1></var>";
      echo "   <h2>Student Name - ".$loginUser."</h2></var>";
-     echo "    <var><h4>  Exam Time : ".$value['Duration']."mins </h4>";
+  //   echo "    <var><h4>  Exam Time : ".$value['Duration']."mins </h4>";
     //  echo "    <h2>Exam Time : ".$value['Duration']."</h2>";
-     echo "    <h2>Time Left :<div id=response> </div></h2>";
+    // echo "    <h2>Time Left :<div id=resonse> </div></h2>";
  
  }
 
@@ -150,7 +166,7 @@ echo $loginUser;
 date_default_timezone_set('Asia/Colombo');
 
  $_SESSION['duration']=$ExamDuration;
-echo $ExamDuration;
+// echo $ExamDuration;
 $_SESSION['start_time']=date("Y-m-d H:i:s");
  $end_time= date('Y-m-d H:i:s', strtotime("+".$_SESSION['duration'].'minutes',strtotime($_SESSION['start_time'])));
 $_SESSION['end_time']=$end_time;
@@ -163,7 +179,7 @@ $_SESSION['end_time']=$end_time;
 
 
 
-<h2><div id=response></div></h2>
+<h2><div id=resonse></div></h2>
 <script type="text/javascript">
 setInterval(function()
   {
@@ -180,7 +196,7 @@ setInterval(function()
 <?php 
 
     $examMinutes=$ExamDuration*60*1000;
-    echo $examMinutes;
+  //  echo $examMinutes;
 
 
 ?>
@@ -229,15 +245,62 @@ setInterval(function()
         </style>
 
 
+<?php
+
+// $loginUser = $_SESSION['LoginUser'];
+//echo $loginUser;
+
+// echo '<h1>'. $loginUser.'</h1>';
+
+
+// $queryyyy="SELECT `Uid` FROM `user` WHERE `UserName`= $loginUser";
+// $connect =mysqli_query($conn,$queryyyy);
+// $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+
+// foreach($data as $value)
+//     {
+//       $UsID= $value['Uid'];
+//       echo $UsID;
+//       echo '<h1>'. $UsID.'</h1>';
+      
+//     }
+//     ?>
+
+
 
 
 <form action="" method="POST">
-    <div class="quizpaper">
-        <div class="card" id="questions" style="width: 35rem;">
+    <!-- <div class="quizpaper"> -->
+        <!-- <div class="card" id="questions" style="width: 35rem;"> -->
   <!-- <img src="./images/login.png" class="card-img-top" width="10" height="10" alt="..."> -->
-  <div class="card-body">
+ <!-- // <div class="card-body"> -->
 
-  <?php
+ <?php
+
+ $loginUser = $_SESSION['LoginUser'];
+//echo $loginUser;
+
+echo '<h1>'. $loginUser.'</h1>';
+
+
+$qu="SELECT `Uid` FROM `user` WHERE `UserName`= $loginUser";
+$connect =mysqli_query($conn,$qu);
+$data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
+
+foreach($data as $value)
+    {
+      $UsID= $value['Uid'];
+      echo $UsID;
+      echo '<h1>'. $UsID.'</h1>';
+      
+    }
+    ?>
+
+
+
+<?php
+
+
 
     $query="SELECT * FROM `question` WHERE `Exam_Eid`=$Examid ORDER BY Qid ASC";
     $connect =mysqli_query($conn,$query);
@@ -446,7 +509,9 @@ if(isset($_POST['submit']))
                             if ($_POST['quizcheck'][$value['Qid']] == $value['Answer'])
                             {
                                 $correctAnswer= 'Correct Answer';
-                             echo $correctAnswer;
+                                echo '<div id="" class="container">';
+                             echo '<h5>' .$value['Quiz']. '<div id="rightAnswer">*' .$correctAnswer.'</h5><br>';
+                             echo '</div>';
                               $CorrectAns++;
 
                                $i++;
@@ -454,7 +519,9 @@ if(isset($_POST['submit']))
                             else
                             {
                                 $wrongAnswer= 'Wrong Answer';
-                             echo $wrongAnswer;
+                                echo '<div id="" class="container">';
+                             echo  '<h5>' .$value['Quiz']. '<div id="wrongAnswer">*' .$wrongAnswer.'</div></h5><br>';
+                             echo '</div>';
                               $WrongAns ++;	
 
                               $quizCounter++;
@@ -570,11 +637,36 @@ if(isset($_POST['submit']))
   //echo $Total;
 
 
+  $queryMarks=" INSERT INTO `paper`(`marks`, `User_Uid`)
+   VALUES ('$toTotal','$UserDD')";
+   $stmt=$conn->prepare($queryMarks);
+
+   if($conn->query($queryMarks))
+   {
+     $query_marks_user="INSERT INTO `user_exam`(`User_Uid`, `Exam_Eid`) 
+     VALUES ('$UserDD', '$Examid')";
+
+   }
+
+  
+      if($conn->multi_query($query_marks_user))
+      {
+        echo 'Record Saved';
+      }
+      else
+      {
+      echo 'Record not Saved';
+      }
+
+
+      // $query="UPDATE `exam` SET `Examcol`='Active' WHERE `Examcol`='Active'";
+      // $connect =mysqli_query($conn,$query);
+
 }
 
    echo ' <div class=container>
     <div class="card">
-<h5 class="card-header">'.$ExamName.'</h5>
+<h5 class="card-header">Your Report</h5>
 <div class="card-body">
   <h5 class="card-title">Your Marks - '.(intval($toTotal)).'%</h5>
   <h6 class="card-title">Number of questions in the paper- '.$NumofQss.'</h6>
@@ -583,7 +675,7 @@ if(isset($_POST['submit']))
   <p class="card-text"></p>
 
   <form method="POST">
-  <input type="submit"  name="btnclose" class="btn btn-primary"/>Close</input>
+  <input type="submit"  name="btnclose" value="Close" class="btn btn-primary"/>
   </form>
 </div>
 </div>
@@ -600,6 +692,18 @@ if(isset($_POST['submit']))
 
 
 ?>
+
+<style>
+  #wrongAnswer
+  {
+    color: red;
+  }
+
+  #rightAnswer
+  {
+    color: green;
+  }
+</style>
 
 
 
