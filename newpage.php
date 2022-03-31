@@ -31,7 +31,8 @@ $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
 foreach($data as $value)
 {
   $UserDD = $value['Uid'];
-  echo $UserDD;
+  //echo $UserDD;
+
  // $ExamDuration= $value['Duration'];
 }
  //T
@@ -45,6 +46,9 @@ $examMinutes;
 //   echo 'good';
 // }
 ?>
+
+
+
 
 
 
@@ -91,9 +95,9 @@ $examMinutes;
 <?php
 
 $loginUser = $_SESSION['LoginUser'];
-echo $loginUser;
+//echo $loginUser;
 $rowid = $_GET['rowid'];
-echo $rowid;
+//echo $rowid;
 ?>
 
 
@@ -280,7 +284,7 @@ setInterval(function()
  $loginUser = $_SESSION['LoginUser'];
 //echo $loginUser;
 
-echo '<h1>'. $loginUser.'</h1>';
+// echo '<h1>'. $loginUser.'</h1>';
 
 
 $qu="SELECT `Uid` FROM `user` WHERE `UserName`= $loginUser";
@@ -435,8 +439,8 @@ if(isset($_POST['submit']))
 
 
 
-  echo $ExamName;
-  print_r($_POST['quizcheck']);
+ // echo $ExamName;
+//  print_r($_POST['quizcheck']);
 
 
   // echo $quizID;
@@ -603,11 +607,11 @@ if(isset($_POST['submit']))
     $toTotal = ($i / $NumofQss)*100;
 
   // echo ($NumofQs);
-  echo '<br>Your marks'.$toTotal.'%<br>';
-  echo '<br>Quiz Counter'.$NumofQss.'<br>';
+  // echo '<br>Your marks'.$toTotal.'%<br>';
+  // echo '<br>Quiz Counter'.$NumofQss.'<br>';
 
-  echo 'your Score is '.$i.'';
-  echo '<br>your have answered'.$countt.'';
+  // echo 'your Score is '.$i.'';
+  // echo '<br>your have answered'.$countt.'';
 
   echo '</div>';
   echo '</div>';
@@ -651,11 +655,11 @@ if(isset($_POST['submit']))
   
       if($conn->multi_query($query_marks_user))
       {
-        echo 'Record Saved';
+        echo '<script>alert("Record Saved")</script>';
       }
       else
       {
-      echo 'Record not Saved';
+        echo '<script>alert("You Submitted the answers once.Record not Saved")</script>';
       }
 
 
@@ -720,8 +724,8 @@ if(isset($_POST['btnclose']))
     echo'  </script>';
 
     
-        $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
-        $connect =mysqli_query($conn,$query);
+        // $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
+        // $connect =mysqli_query($conn,$query);
 
 
     // $query="SELECT * FROM `exam` WHERE `Examcol`='close'";
@@ -789,6 +793,22 @@ if(isset($_POST['btnclose']))
 
 </body>
 </html>
+
+<!-- <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<script>
+  $document.ready(function(){
+    $('#div_refresh').load();
+    setInterval(function(){
+      $('#div_refesh').load();
+      },3000);
+  // })
+
+  });
+</script> -->
+
+
+
 
 <style>
     .quizpaper

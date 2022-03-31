@@ -6,7 +6,7 @@ session_start();
 
 // unset($_SESSION['quiz']);
 
-if(!isset($_SESSION['LoginUser']))
+if(!isset($_SESSION['LoginUserad']))
 {
   header("location:login.php");
 
@@ -142,7 +142,8 @@ $_SESSION['choice_iv'] = $choice_iv;
       <input type="text" name="choice_ii" placeholder="Choice_2"  class="form-control" id="inputAnswer">
       <input type="text" name="choice_iii" placeholder="Choice_3"  class="form-control" id="inputAnswer">
       <input type="text" name="choice_iv" placeholder="Choice_4"  class="form-control" id="inputAnswer">
-      <input type="text" name="correct" placeholder="Correct Answer"  class="form-control" id="inputAnswer">
+ 
+      <input type="text" name="correct" value="" placeholder="Correct Answer"  class="form-control" id="inputAnswer">
     </div>
     </div>
     
@@ -305,28 +306,32 @@ if(isset($_POST['btnClear']))
  <td> 
    <?php
    
-   $query="SELECT `Eid`, `ExamName`, `SDate`, `Duration`, `Examcol` FROM `exam` ORDER BY Eid ASC";
-  $connect =mysqli_query($conn,$query);
+   $querwy="SELECT `Eid`, `ExamName`, `SDate`, `Duration`, `Examcol` FROM `exam`";
+  $connect =mysqli_query($conn,$querwy);
  
+  $r=0;
   $data =mysqli_fetch_all($connect,MYSQLI_ASSOC);
   echo '<select name="Category" class="form-control"> ';
   foreach($data as $value)
   {
-    echo $value['ExamName'];
-    echo $value['Eid'];
+    // echo $value['ExamName'];
+     echo $value['Eid'];
     $examIDforDrop=$value['Eid'];
+
+
+  
   
    
-   ?>
+ 
  
 
  
-  <option value="<?php echo $value['Eid']; ?>">
-  <?php echo $value['ExamName']?>
-  </option>
+ echo' <option  value="'.$examIDforDrop.'">
+ '.$value['ExamName'].'
+  </option>';
   
-
-   <?php
+   
+   $r++;
   }
    ?>
      </select>
@@ -343,19 +348,46 @@ if(isset($_POST['btnClear']))
 
 
 <?php
+//echo $examIDforDrop;
+
+//echo $_POST($dropname['.$examIDforDrop.']);
+
+?>
+
+
+<?php
 
 if (isset($_POST['btnQuestion']))
 {
+
+  $idd = mysqli_real_escape_string($conn,$_POST['Category']);
+
+ // $sexamIDforDroppp=$_POST($value['Eid']);
+  //$examIDforDroppp=$_POST[$examIDforDrop];
+ // echo $examIDforDroppp;
+
+
   foreach($quiz as $key=>$value)
   {
 
   $queryEditQuestions="INSERT INTO `question`(`Quiz`, `Choice_i`,
    `Choice_ii`, `Choice_iii`, `Choice_iv`, `Answer`, `Exam_Eid`) 
-  VALUES ('[value-2]','[value-3]','[value-4]',
-  '[value-5]','[value-6]','[value-7]','[value-8]')";
+  VALUES ('".$quiz[$key]."',
+  '".$choice_i[$key]."',
+  '".$choice_ii[$key]."',
+  '".$choice_iii[$key]."',
+  '".$choice_iv[$key]."',
+  '".$correct[$key]."',
+  '".$idd."')";
   $stmt=$conn->prepare($queryEditQuestions);
+  $stmt=$conn->query($queryEditQuestions);
 
   }
+
+  echo '<script>alert("Questions save to the Exam")</script>';
+  // echo' <script language="Javascript">';
+  // echo'  window.location = "index.php";';
+  // echo'  </script>';
 
 }
 

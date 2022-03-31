@@ -22,10 +22,10 @@ foreach($data as $value)
 
  //T
 
-$ExamDuration;
+// $ExamDuration;
 
-$examMinutes=$ExamDuration*60;
-$examMinutes;
+// $examMinutes=$ExamDuration*60;
+// $examMinutes;
 // if($examMinutes=0)
 // {
 //   echo 'good';
@@ -196,7 +196,7 @@ setInterval(function()
     // $connect =mysqli_query($conn,$query);
     ?>
   }
-  setTimeout('redirectpage()',<?php echo $ExamDurations ?>);
+  setTimeout('redirectpage()',<?php echo $ExamDurations; ?>);
 
  
 

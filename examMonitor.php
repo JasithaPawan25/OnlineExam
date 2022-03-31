@@ -156,6 +156,26 @@ $_SESSION['end_time']=$end_time;
 
 ?>
 
+<script>
+function update() {
+  $.get("examMonitor.php", function(data) {
+    $("#some_div").html(data);
+    window.setTimeout(update, 10000);
+  });
+}
+</script>
+
+<?php
+
+// echo' <script>
+// function update() {
+//   $.get("examMonitor.php", function(data) {
+//     $("#some_div").html(data);
+//     window.setTimeout(update, 1000);
+//   });
+// }
+// </script>';
+?>
 <?php
 
 if($ExamDuration!=0)
@@ -179,8 +199,8 @@ setInterval(function()
   {
     window.location="admin.php";
     <?php
-    $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
-    $connect =mysqli_query($conn,$query);
+    // $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
+    // $connect =mysqli_query($conn,$query);
     ?>
   }
   setTimeout('redirectpage()',<?php echo $ExamDurations ?>);
@@ -303,13 +323,29 @@ setInterval(function()
     <h2><?php echo $ExamDuration?></h2>
 </div>
 
-<div class="mb-3">
-  <label for="formGroupExampleInput2" class="form-label">End Time</label>
+<!-- <div class="mb-3">
+  <label for="formGroupExampleInput2" class="form-label">End Time</label> -->
   <!-- <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder"> -->
-    <h2>--/--</h2>
-</div>
+    <!-- <h2>--/--</h2>
+</div> -->
 
 </div>
+
+
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<script>
+  $document.ready(function(){
+    $('#div_refresh').load(autoupdate.php);
+    setInterval(function(){
+      $('#div_refesh').load(autoupdate.php);
+      },3000);
+  // })
+
+  });
+</script>
+
 
 <?php
 
@@ -346,27 +382,34 @@ $queryStudentFinished="SELECT  `UserName` FROM `user` WHERE `Uid` =".$studentfin
  {
    // echo $value['UserName'];
 // echo'<input type="readonly" class="form-control" value="'.$value['UserName'].'" id="formGroupExampleInput" placeholder="Example input placeholder">';
-echo '<label class="container"><h3><em>'.$value['UserName'].'</em></h3></label>';
+// echo '<div id="div_refresh"></div>';
+echo '<label class="container"><h3><em><div id="some_div">'.$value['UserName'].'</div></em></h3></label>';
 
  }
 }
 
  echo '</div>';
 
- echo '<form method="POST"> <button class="btn btn-outline-success" type="submit">End the Exam</button>
+ echo '<form method="POST"> <button class="btn btn-outline-success" name="btnclose" type="submit">End the Exam</button>
  </button></div>';
 
 
- if(isset($_POST['submit']))
+ if(isset($_POST['btnclose']))
  {
-  echo '<script>alert("Exam End:)")</script>';
-  echo' <script language="Javascript">';
-  echo'  window.location = "index.php";';
-  echo'  </script>';
+  // echo '<script>alert("Exam End:)")</script>';
+  // echo' <script language="Javascript">';
+  // echo'  window.location = "index.php";';
+  // echo'  </script>';
 
   
       $query="UPDATE `exam` SET `Examcol`='Closed' WHERE `Examcol`='Active'";
       $connect =mysqli_query($conn,$query);
+
+      echo '<script>alert("Exam End:)")</script>';
+      echo' <script language="Javascript">';
+      echo'  window.location = "admin.php";';
+      echo'  </script>';
+
  }
 
 

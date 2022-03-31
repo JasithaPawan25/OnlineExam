@@ -102,7 +102,11 @@ session_start();
     <div class="mb-3 row">
     <label for="inputPassword" class="col-sm-2 col-form-label">Status</label>
     <div class="col-sm-8">
-      <input type="text" name="userStatus" class="form-control" id="inputPassword">
+    <select name="Statusx" class="form-control">
+      <option value="admin">Admin</option>
+      <option value="student">student</option>
+</select>
+      <!-- <input type="text" name="userStatus" class="form-control" id="inputPassword"> -->
     </div>
   </div>
   <!-- <p></p> -->
@@ -121,14 +125,17 @@ session_start();
 //php echo $message 
 if(isset($_POST['btnAdd']))
 {
+
+  $iddName = mysqli_real_escape_string($conn,$_POST['Statusx']);
+
     $Username = $_POST['username'];
     $UserEmail = $_POST['useremail'];
     $UserPW = $_POST['password'];
-    $UserStatus= $_POST['userStatus'];
+    // $UserStatus= $_POST['userStatus'];
 
 
     $query = "INSERT INTO `user`(`UserName`, `UserPw`, `UserEmail`, `UserStatus`) 
-    VALUES ('$Username','$UserPW','$UserEmail ','$UserStatus')";
+    VALUES ('$Username','$UserPW','$UserEmail ','$iddName')";
     $statement = $conn ->prepare($query); 
 
     $statement ->execute();

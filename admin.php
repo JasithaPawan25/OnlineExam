@@ -118,7 +118,8 @@ foreach($data as $value)
 			echo"	<td>".$value['Examcol']."</td>";
       // echo"	<td>".$value['Examcol']."</td>";
       echo "<td><form method='POST'>
-      <button name='btnActive' class='btn btn-primary' value='".$Activeid."'>Open</button></td>;
+      <a href='http://localhost/OnlineExam/examMonitor.php' target='_blank'>
+      <button name='btnActive' class='btn btn-primary' value='".$Activeid."'>Open</button></a></td>;
       <td><button name='btnDeActive' class='btn btn-primary' value='".$DeActiveid."'>Close</button></form></td>";
       echo"</tr>";
 
@@ -153,9 +154,24 @@ $connect =mysqli_query($conn,$query);
 
 echo '<script>alert("Exam Activate")</script>';
         echo' <script language="Javascript">';
-        echo'  window.location = "admin.php";';
+        echo'  window.location = "examMonitor.php";';
         echo'  </script>';
 
+    // echo'    <script type="text/javascript">
+
+    //     window.open("examMonitor.php")
+    //     </script> ';
+//http://localhost/OnlineExam/examPaper.php
+
+?>
+
+<script>
+  // $(document).ready(function(){
+  //   window.open(localhost/OnlineExam/examMonitor.php, "_blank"); // will open new tab on document ready
+  // });
+</script>
+
+<?php
 }
 ?>
 
